@@ -1,0 +1,25 @@
+body {
+  margin: 10;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+  background-color: #ffffff;
+}
+
+table, th, td
+{
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+.area {
+  fill: green;
+}

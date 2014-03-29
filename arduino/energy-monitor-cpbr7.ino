@@ -7,6 +7,10 @@
 EnergyMonitor emon1;		// Uma instância de um monitor de energial da Emon Library.
 const int CT_PIN = 1;		// Pino onde está conectado o sinal do sensor de corrente.
 
+byte ip[]   = {192,168,  0,101};                      // ip address (if dhcp not used)
+byte gw[]   = {192,168,  0,  1};                      // gateway address
+byte ns[]   = {  8,  8,  8,  8};                      // name server address
+byte sub[]  = {255,255,255,  0};                      // network mask
 byte mac[]  = { 0x90, 0xA2, 0xDA, 0x0E, 0x04, 0x21 }; // Endereço MAC do Shield Ethernet (olhe atrás dele).
 EthernetClient client;		// Uma instância de um cliente TCP (usaremos eles para enviar os dados).
 
@@ -25,8 +29,11 @@ void setup()
 	Serial.print("Inicializando Ethernet com DHCP...");
 	if (Ethernet.begin(mac) == 0) { 
 		Serial.println("falhou.");
-		Serial.println("Aplicação interrompida.");
-		while(1);		// Fica em loop indefinidamente (aplicação interrompida).
+    Serial.print("Inicializando com IP fixo...");
+    Ethernet.begin(mac,ip,ns,gw,sub);
+    Serial.println("feito!");
+		//Serial.println("Aplicação interrompida.");
+		//while(1);		// Fica em loop indefinidamente (aplicação interrompida).
 	} else {
 		Serial.println("feito!");
 	}
@@ -40,7 +47,7 @@ void setup()
 // Envia dados para servidor.
 void sendData(double Irms, double Potencia) {
   
-  client.connect("10.0.1.108",4000);	// Conecta no servidor na porta 80 (vamos usar http).
+  client.connect("192.168.0.100",4000);	// Conecta no servidor na porta 80 (vamos usar http).
   delay(500);
   
   if (client.connected()) {
@@ -50,8 +57,7 @@ void sendData(double Irms, double Potencia) {
     client.print("&potencia=");
     client.print(Potencia);
     client.println(" HTTP/1.1");
-    client.println("Host: 10.0.1.108");
-    client.println("User-Agent: Arduino/1.0");
+    client.println("Host: 192.168.0.100");
     client.println();
     delay(500);
 
